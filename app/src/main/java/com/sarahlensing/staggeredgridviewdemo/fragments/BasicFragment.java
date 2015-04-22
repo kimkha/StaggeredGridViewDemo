@@ -1,6 +1,7 @@
 package com.sarahlensing.staggeredgridviewdemo.fragments;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.sarahlensing.staggeredgridview.StaggeredGridSectionAdapter;
 import com.sarahlensing.staggeredgridview.StaggeredGridView;
 import com.sarahlensing.staggeredgridviewdemo.R;
 import com.sarahlensing.staggeredgridviewdemo.views.GridItemView;
+import com.sarahlensing.staggeredgridviewdemo.views.StickyStaggeredView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,13 +32,43 @@ public class BasicFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "BasicFragment";
 
-    StaggeredGridView mGridView;
+    StickyStaggeredView mGridView;
     ArrayList<ItemSize> mItemSizes;
     ArrayList<com.sarahlensing.staggeredgridview.ItemSize> mSectionSizes;
 
     private final Random random = new Random();
 
     String mOrientation;
+    private StickyStaggeredView.OnScrollListener mScrollListener = new StickyStaggeredView.OnScrollListener() {
+
+        @Override
+        public void onScrollStateChanged(ViewGroup view, int scrollState) {
+            Log.e(TAG, "[onScrollStateChanged] scrollState:" + scrollState);
+//            switch (scrollState) {
+//                case SCROLL_STATE_IDLE:
+//                    setTitle("SCROLL_STATE_IDLE");
+//                    break;
+//
+//                case SCROLL_STATE_FLING:
+//                    setTitle("SCROLL_STATE_FLING");
+//                    break;
+//
+//                case SCROLL_STATE_TOUCH_SCROLL:
+//                    setTitle("SCROLL_STATE_TOUCH_SCROLL");
+//                    break;
+//
+//                default:
+//                    break;
+//            }
+
+        }
+
+        @Override
+        public void onScroll(ViewGroup view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            Log.e(TAG, "[onScroll] firstVisibleItem:" + firstVisibleItem + " visibleItemCount:"+visibleItemCount + " totalItemCount:" + totalItemCount);
+
+        }
+    };
 
     public BasicFragment() {
         super();
@@ -54,7 +86,7 @@ public class BasicFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(fragmentLayoutID(), container, false);
-        mGridView = (StaggeredGridView)rootView.findViewById(R.id.gridView);
+        mGridView = (StickyStaggeredView)rootView.findViewById(R.id.gridView);
         return rootView;
     }
 
@@ -64,6 +96,7 @@ public class BasicFragment extends android.support.v4.app.Fragment {
             mGridView.setGridOrientation(mOrientation);
         }
         mGridView.setAdapter(mGridSectionAdapter);
+        mGridView.setOnScrollListener(mScrollListener);
         buildGridSizes();
         startReloadTimer();
         super.onViewCreated(view, savedInstanceState);
@@ -120,12 +153,22 @@ public class BasicFragment extends android.support.v4.app.Fragment {
         boolean useRnd = true;
         int levelOfRnd = 3;
 
+        int width = getActivity().getWindowManager().getDefaultDisplay().getWidth();
+        if (width<= 0) {
+            width = 200;
+        } else {
+            width = (width - 1)/3 - 1;
+        }
+
         ArrayList<ItemSize> itemSizes = new ArrayList<ItemSize>();
         for (int i = 0; i < 200; i++) {
 
             if (useRnd) {
-                int width = (random.nextInt(levelOfRnd)+1) * 200;
-                int height = (random.nextInt(levelOfRnd-1)+1) * 200;
+                //int width = (random.nextInt(levelOfRnd)+1) * 200;
+                int height = 200;
+                if (random.nextBoolean()) {
+                    height = 400;
+                }
                 itemSizes.add(new ItemSize(width, height));
             }
             else {
@@ -153,7 +196,7 @@ public class BasicFragment extends android.support.v4.app.Fragment {
     }
 
     private ArrayList<ItemSize> getSectionItemSizes(String orientation) {
-        int sectionSize = 200;
+        int sectionSize = 50;
         int maxHeight = getActivity().getWindowManager().getDefaultDisplay().getHeight()-2*mGridView.getItemMargin();
         int maxWidth = getActivity().getWindowManager().getDefaultDisplay().getWidth()-2*mGridView.getItemMargin();
         ArrayList<ItemSize> sectionSizes = new ArrayList<ItemSize>();
@@ -203,7 +246,7 @@ public class BasicFragment extends android.support.v4.app.Fragment {
                         Toast.makeText(BasicFragment.this.getActivity(), "About to reload", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "About to notifyDataSetChanged()");
 
-                        mGridView.reloadGrid();
+                        //mGridView.reloadGrid();
 
                         //more efficient than reloadGrid if we are guaranteed that we are appending data
                         //mGridView.reloadGridAppendItems();

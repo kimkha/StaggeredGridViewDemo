@@ -17,7 +17,7 @@ public class MainActivity extends ActionBarActivity {
     Fragment mCurrentFragment;
 
     private void createBasicFragment() {
-        createBasicFragment(StaggeredGridView.STAGGERED_GRID_DEFAULT_ORIENTATION);
+        createBasicFragment(StaggeredGridView.STAGGERED_GRID_ORIENTATION_VERTICAL);
     }
 
     private void createBasicFragment(String initOrientation) {
@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
         getWindow().setBackgroundDrawable(null);
         setContentView(R.layout.activity_main);
 
+//        create2DScrollFragment();
         createBasicFragment();
         makeCurrentFragmentVisible();
     }

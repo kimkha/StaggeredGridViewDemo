@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.sarahlensing.staggeredgridview.StaggeredGridView
+    <com.sarahlensing.staggeredgridviewdemo.views.StickyStaggeredView
         xmlns:staggered="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        staggered:gridOrientation="horizontal"
+        staggered:gridOrientation="vertical"
         staggered:itemMargin="1dp"
         staggered:numPagesToPreload="2"
         android:id="@+id/gridView" />

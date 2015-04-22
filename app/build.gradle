@@ -1,24 +1,17 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
-    }
-}
-apply plugin: 'android'
+
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19'
+    compileSdkVersion 22
+    buildToolsVersion '22'
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 19
+        minSdkVersion 14
+        targetSdkVersion 22
     }
 //    buildTypes {
 //        release {
@@ -43,7 +36,7 @@ dependencies {
 
     //StaggeredGridView//
     //1.Pull latest from Maven Central
-    //compile 'com.sarahlensing.staggeredgridview:library:0.0.3'
+    //compile 'com.sarahlensing.staggeredgridview:library:+'
     //--or--
     //2.Use gradle library dependency (notice that in this case, it's also a git submodule)
     compile project(':submodules:StaggeredGridView:library')
